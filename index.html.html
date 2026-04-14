@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>D-Reflection Note | 大東文化大学</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gd:#1E3A0F; --gm:#3B6621; --gl:#568C30; --ga:#7DB54C;
+  --gp:#C8E4A0; --gbg:#EBF4DF; --white:#fff;
+  --txt:#1A2A0F; --muted:#5A6E50; --border:#B8D898;
+  --s1:#C62828;--s2:#E65100;--s3:#D4A017;--s4:#3D7A2B;--s5:#1B5E20;
+  --r:14px; --sh:0 2px 16px rgba(30,58,15,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+#app{
+  font-family:'Noto Sans JP',-apple-system,sans-serif;
+  background:var(--gbg);color:var(--txt);
+  max-width:500px;margin:0 auto;height:100dvh;
+  display:flex;flex-direction:column;
+}
+.sc{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.sc.on{display:flex;}
+.sa{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch;}
+/* HEADER */
+.hdr{background:var(--gd);color:#fff;padding:13px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.hdr-logo{width:38px;height:38px;border-radius:10px;background:var(--ga);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:var(--gd);letter-spacing:-1px;flex-shrink:0;}
+.hdr h1{font-size:16px;font-weight:700;}.hdr .sub{font-size:10px;opacity:.7;font-weight:400;}
+.back-btn{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:2px 6px 2px 0;line-height:1;}
+/* BOTTOM NAV */
+.bnav{background:var(--white);border-top:1px solid var(--border);display:flex;flex-shrink:0;}
+.ni{flex:1;padding:9px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;color:var(--muted);font-family:inherit;}
+.ni.on{color:var(--gm);}
+.ni-ic{font-size:19px;line-height:1;}.ni-lb{font-size:9.5px;font-weight:500;}
+/* INPUTS */
+.inp{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:15px;color:var(--txt);background:#fff;-webkit-appearance:none;}
+.inp:focus{outline:none;border-color:var(--gm);}
+.ta{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;color:var(--txt);resize:vertical;min-height:80px;line-height:1.7;-webkit-appearance:none;}
+.ta:focus{outline:none;border-color:var(--gm);}
+.fg{margin-bottom:14px;}
+.fl{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:6px;display:block;}
+.fl .req{color:var(--s1);margin-left:3px;}
+.fl .hint{font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;}
+/* BUTTONS */
+.btn{width:100%;padding:14px;background:var(--gm);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:opacity .15s,transform .1s;}
+.btn:active{transform:scale(.98);opacity:.9;}
+.btn2{width:100%;padding:12px;background:var(--gbg);color:var(--gm);border:1.5px solid var(--ga);border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-sm{padding:8px 14px;background:var(--gbg);color:var(--gm);border:1.5px solid var(--ga);border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+/* CARDS */
+.card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh);}
+.ctit{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;}
+/* SCALE */
+.sc-wrap{margin-bottom:16px;}
+.sc-lbl{font-size:13px;font-weight:700;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;}
+.sc-sub{font-size:11px;color:var(--muted);font-weight:400;}
+.sc-row{display:flex;gap:6px;}
+.sb{flex:1;padding:11px 4px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:18px;font-weight:900;cursor:pointer;background:#fff;color:var(--muted);transition:all .12s;}
+.sb.s1{background:#FFEBEE;border-color:var(--s1);color:var(--s1);}
+.sb.s2{background:#FFF3E0;border-color:var(--s2);color:var(--s2);}
+.sb.s3{background:#FFFDE7;border-color:var(--s3);color:var(--s3);}
+.sb.s4{background:#F1F8E9;border-color:var(--s4);color:var(--s4);}
+.sb.s5{background:#E8F5E9;border-color:var(--s5);color:var(--s5);}
+.sc-hints{display:flex;justify-content:space-between;margin-top:3px;}.sc-hint{font-size:10px;color:var(--muted);}
+/* INJURY */
+.inj-row{display:flex;gap:8px;margin-bottom:10px;}
+.tb{flex:1;padding:10px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;background:#fff;color:var(--muted);}
+.tb.no{background:#E8F5E9;border-color:var(--s5);color:var(--s5);}.tb.yes{background:#FFEBEE;border-color:var(--s1);color:var(--s1);}
+/* HISTORY ITEMS */
+.ei{background:#fff;border-radius:12px;padding:13px 15px;margin-bottom:8px;box-shadow:var(--sh);display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .1s;}
+.ei:active{transform:scale(.98);}
+.edb{text-align:center;min-width:46px;background:var(--gbg);border-radius:10px;padding:8px 6px;}
+.ed{font-size:22px;font-weight:900;color:var(--gm);line-height:1;}.em{font-size:10px;color:var(--muted);font-weight:500;}
+.ei-info{flex:1;}.ei-t{font-size:14px;font-weight:700;margin-bottom:3px;}.ei-m{font-size:11px;color:var(--muted);}
+.scbadge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;}
+/* WEEKLY */
+.wsel{background:#fff;border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;box-shadow:var(--sh);}
+.wnb{background:var(--gbg);border:none;border-radius:8px;width:36px;height:36px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.wlbl{font-size:15px;font-weight:700;}.wdt{font-size:11px;color:var(--muted);}
+/* VIEW */
+.dr{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--gbg);}
+.dr:last-child{border-bottom:none;}.dk{font-size:13px;color:var(--muted);}.dv{font-size:14px;font-weight:700;text-align:right;max-width:62%;}
+/* MISC */
+.notice{background:var(--gbg);border-left:4px solid var(--ga);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12px;color:var(--gm);line-height:1.6;margin-bottom:14px;}
+.stit{font-size:13px;font-weight:700;color:var(--muted);margin:12px 0 6px;}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-ic{font-size:48px;margin-bottom:12px;}
+.tw{display:flex;gap:12px;}.tc{flex:1;}
+.wr{position:relative;}.wu{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);font-weight:700;}
+.sbw{padding:14px 0 6px;}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--s5);color:#fff;padding:10px 24px;border-radius:24px;font-size:13px;font-weight:700;opacity:0;transition:all .25s;pointer-events:none;z-index:9999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== INTRO SCREEN ===== */
+#si .intro-top{background:linear-gradient(155deg,var(--gd) 0%,var(--gm) 100%);padding:36px 24px 28px;color:#fff;text-align:center;}
+#si .intro-logo{width:64px;height:64px;border-radius:16px;background:var(--ga);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:var(--gd);margin:0 auto 14px;letter-spacing:-2px;}
+#si .intro-title{font-size:24px;font-weight:900;letter-spacing:.02em;margin-bottom:4px;}
+#si .intro-sub{font-size:11px;opacity:.8;line-height:1.6;}
+.intro-body{padding:20px 20px 0;}
+.intro-section-label{font-size:13px;font-weight:900;color:var(--gm);border-left:4px solid var(--ga);padding-left:10px;margin-bottom:10px;}
+.intro-text{font-size:13.5px;line-height:1.95;color:var(--txt);margin-bottom:16px;}
+.intro-quote{background:var(--gd);color:#fff;border-radius:12px;padding:18px 20px;margin-bottom:16px;position:relative;}
+.intro-quote-text{font-size:14px;line-height:1.9;font-weight:500;}
+.intro-quote-kagi{font-size:18px;font-weight:900;color:var(--ga);line-height:1;vertical-align:-.05em;}
+.intro-attr{font-size:12px;color:var(--muted);text-align:right;margin-bottom:20px;line-height:1.7;}
+.intro-notice{background:var(--gbg);border:1.5px solid var(--gp);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.intro-notice strong{color:var(--gm);}
+
+/* ===== WELCOME (PROFILE SETUP) ===== */
+#sw .profile-top{background:var(--gd);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;}
+#sw .profile-top .logo{width:38px;height:38px;border-radius:10px;background:var(--ga);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:var(--gd);letter-spacing:-1px;flex-shrink:0;}
+#sw .profile-top h1{font-size:16px;font-weight:700;color:#fff;}.sw-sub{font-size:10px;opacity:.7;}
+.profile-section{margin-bottom:8px;}
+.profile-section-hdr{font-size:12px;font-weight:900;color:var(--white);background:var(--gm);padding:8px 14px;border-radius:8px;margin-bottom:10px;letter-spacing:.04em;}
+
+/* ===== HOME ===== */
+.home-top{background:linear-gradient(145deg,var(--gd) 0%,var(--gm) 100%);padding:20px 20px 30px;color:#fff;flex-shrink:0;}
+.gt{font-size:12px;opacity:.8;margin-bottom:3px;}.gn{font-size:22px;font-weight:900;}
+.sbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-top:10px;}
+.today-card{margin:-14px 14px 0;background:#fff;border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.st-dot{width:9px;height:9px;border-radius:50%;}.st-dot.ok{background:var(--s5);}.st-dot.ng{background:var(--s2);}
+.st-txt{font-size:14px;font-weight:700;}.st-dt{font-size:11px;color:var(--muted);}
+/* Goals card */
+.goal-card{background:var(--white);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh);border-left:4px solid var(--gm);}
+.goal-card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.goal-card-title{font-size:13px;font-weight:900;color:var(--gm);}
+.goal-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--gbg);}
+.goal-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.goal-item-label{font-size:10.5px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;}
+.goal-item-text{font-size:14px;font-weight:700;color:var(--txt);line-height:1.6;}
+.goal-item-text.motto{font-size:15px;color:var(--gm);font-style:italic;}
+.goal-empty{font-size:13px;color:var(--muted);font-style:italic;}
+/* About card on home */
+.about-card{background:var(--gd);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;cursor:pointer;}
+.about-card-inner{display:flex;align-items:center;gap:12px;}
+.about-icon{font-size:24px;flex-shrink:0;}
+.about-title{font-size:14px;font-weight:700;color:#fff;}
+.about-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;}
+
+/* ===== PDF OVERLAY ===== */
+#pdf-overlay{display:none;position:fixed;inset:0;background:#f5f5f5;z-index:10000;flex-direction:column;max-width:500px;margin:0 auto;font-family:'Noto Sans JP',-apple-system,sans-serif;}
+#pdf-overlay.on{display:flex;}
+#pdf-toolbar{background:var(--gd);color:#fff;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+#pdf-toolbar .tl{font-size:15px;font-weight:700;}.#pdf-toolbar .ts{font-size:10px;opacity:.7;margin-top:2px;}
+#pdf-content{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch;}
+.pdf-actions{background:var(--gd);padding:14px 16px;display:flex;gap:10px;flex-shrink:0;}
+.btn-print{flex:2;padding:14px;background:var(--ga);color:var(--gd);border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;}
+.btn-cpdf{flex:1;padding:14px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* ===== REPORT STYLES ===== */
+.rpt{background:#fff;font-family:'Noto Sans JP',sans-serif;font-size:11pt;color:#1A2A0F;}
+.rpt-hdr{background:#1E3A0F;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.rpt-hdr-logo{font-size:22pt;font-weight:900;color:#7DB54C;letter-spacing:-2px;}
+.rpt-hdr-title{font-size:15pt;font-weight:900;}.rpt-hdr-sub{font-size:9pt;opacity:.8;margin-top:2px;}
+.rpt-info{background:#EBF4DF;padding:8px 16px;border-bottom:2px solid #3B6621;}
+.rpt-info table{width:100%;border-collapse:collapse;font-size:10pt;}
+.rpt-info td{padding:3px 6px 3px 0;}.rpt-info .lbl{color:#5A6E50;font-weight:700;white-space:nowrap;}.rpt-info .val{color:#1A2A0F;font-weight:900;}
+.rpt-goals{border:1px solid #B8D898;border-radius:6px;margin:10px 16px;overflow:hidden;}
+.rpt-goals-hdr{background:#568C30;color:#fff;padding:6px 12px;font-size:10pt;font-weight:700;}
+.rpt-goals-body{padding:8px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.rpt-goal-item .rgl{font-size:8.5pt;color:#5A6E50;font-weight:700;margin-bottom:2px;}
+.rpt-goal-item .rgv{font-size:10pt;line-height:1.6;}
+.rpt-motto{grid-column:1/-1;}
+.rpt-sec{padding:10px 16px 0;}
+.rpt-sec-tit{font-size:11pt;font-weight:900;color:#1E3A0F;border-bottom:2px solid #3B6621;padding-bottom:4px;margin-bottom:10px;}
+.rpt-tbl{width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:14px;}
+.rpt-tbl th{background:#3B6621;color:#fff;padding:5px 4px;text-align:center;font-weight:700;font-size:8.5pt;}
+.rpt-tbl td{padding:4px 4px;border:1px solid #C8E4A0;text-align:center;vertical-align:middle;}
+.rpt-tbl tr:nth-child(even) td{background:#F5FAF0;}
+.rpt-tbl .tl{text-align:left;}.rpt-tbl .sm{font-size:8pt;}
+.rpt-dot{display:inline-block;width:18px;height:18px;border-radius:50%;color:#fff;font-size:9pt;font-weight:900;line-height:18px;text-align:center;}
+.rpt-week{margin-bottom:10px;border:1px solid #B8D898;border-radius:6px;overflow:hidden;}
+.rpt-week-hdr{background:#568C30;color:#fff;padding:6px 12px;font-size:10pt;font-weight:700;}
+.rpt-week-body{padding:10px 12px;}
+.rpt-wlbl{font-size:9pt;font-weight:700;color:#5A6E50;margin-bottom:3px;margin-top:6px;}.rpt-wlbl:first-child{margin-top:0;}
+.rpt-wval{font-size:10pt;line-height:1.7;white-space:pre-wrap;margin-bottom:4px;}
+.rpt-note{margin-bottom:8px;border-left:3px solid #7DB54C;padding:7px 12px;background:#F5FAF0;}
+.rpt-note-dt{font-size:9.5pt;font-weight:700;color:#3B6621;margin-bottom:3px;}
+.rpt-note-lbl{font-size:8.5pt;color:#5A6E50;font-weight:700;margin-top:4px;margin-bottom:2px;}
+.rpt-note-val{font-size:9.5pt;line-height:1.6;white-space:pre-wrap;}
+.rpt-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.rpt-stat{background:#EBF4DF;border-radius:8px;padding:8px;text-align:center;}
+.rpt-stat-lbl{font-size:8.5pt;color:#5A6E50;margin-bottom:2px;}.rpt-stat-val{font-size:15pt;font-weight:900;color:#3B6621;line-height:1.1;}.rpt-stat-sub{font-size:8pt;color:#5A6E50;}
+.rpt-footer{border-top:1px solid #C8E4A0;padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;}
+.rpt-sig{border-bottom:1px solid #1A2A0F;width:100px;text-align:center;padding-bottom:2px;font-size:9pt;}
+
+@media print{
+  html,body{overflow:visible!important;height:auto!important;max-width:100%!important;}
+  #app{display:none!important;}
+  #pdf-overlay{
+    display:block!important;position:static!important;
+    max-width:100%!important;width:100%!important;
+    height:auto!important;overflow:visible!important;
+    background:#fff!important;z-index:auto!important;
+    inset:auto!important;
+  }
+  #pdf-toolbar,.pdf-actions{display:none!important;}
+  #pdf-content{
+    overflow:visible!important;height:auto!important;
+    padding:0!important;background:#fff!important;
+  }
+  .rpt{font-size:10pt;}
+  @page{size:A4 portrait;margin:10mm 12mm;}
+  .rpt-sec{padding:10px 0 0;}
+  .rpt-goals{margin:10px 0;}
+}
+</style>
+</head>
+<body>
+<div id="toast">✓ 保存しました</div>
+
+<div id="app">
+
+<!-- ===== INTRO (D-reflection Note とは) ===== -->
+<div class="sc on" id="si">
+  <div class="intro-top">
+    <div class="intro-logo">DR</div>
+    <div class="intro-title">D-Reflection Note</div>
+    <div class="intro-sub">大東文化大学 スポーツ・健康科学部<br>スポーツフィールドワーク</div>
+  </div>
+  <div class="sa">
+    <div class="intro-body">
+      <div class="intro-section-label">D-reflection Note とは</div>
+      <div class="intro-text">
+        D-reflection Note はトレーニング目標を設定し、目標達成のための行動記録を記し、課題を言語化することで、自らの行動を客観的に見つめなおすためのノートである。
+      </div>
+      <div class="intro-text">
+        人間の脳は都合の良いことを記憶し、苦痛になることを忘れやすい特性がある。スポーツは目標を達成するにあたり、失敗の連続であり、失敗に対してあきらめずに、しかも合理的、効率的な方法を選択し、取り組み続けなければならない。<br><br>
+        すなわち、アスリートとして目標を達成するためには、日々の課題を視覚化（明確化）し自らの欠点と向き合う<strong>レジリエンス（粘り強さ）</strong>が求められる。<br>
+        この日誌の作成を通して、成功への一助としてもらいたい。
+      </div>
+      <div class="intro-quote">
+        <div class="intro-quote-text"><span class="intro-quote-kagi">『</span>最も努力した選手が成功するとは限らない。それでも、諦めなかったものだけが成功に到達する。<span class="intro-quote-kagi">』</span></div>
+      </div>
+      <div class="intro-attr">大東文化大学<br>スポーツフィールドワーク担当教員</div>
+      <div class="intro-notice">
+        <strong>📱 このアプリについて</strong><br>
+        スマートフォンで毎日の練習記録、体調、疲労感などを入力できます。月末にPDFに変換して提出してください。<br><br>
+        <strong>📌 月間目標・週間目標は紙に書いて掲示しましょう</strong>
+      </div>
+      <div style="padding-bottom:16px;">
+        <button class="btn" onclick="goToProfile()">プロフィールを設定してはじめる →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROFILE SETUP ===== -->
+<div class="sc" id="sw">
+  <div class="profile-top">
+    <div class="logo">DR</div>
+    <div><div class="sw-sub">D-Reflection Note</div><h1>プロフィール設定</h1></div>
+  </div>
+  <div class="sa">
+    <div class="profile-section">
+      <div class="profile-section-hdr">👤 基本情報</div>
+      <div class="fg"><label class="fl">氏名<span class="req">*</span></label><input id="inp-name" class="inp" type="text" placeholder="例：田中 太郎"></div>
+      <div class="fg"><label class="fl">学籍番号</label><input id="inp-sid" class="inp" type="text" placeholder="例：A2300001"></div>
+      <div class="fg"><label class="fl">担当スポーツ・種目</label><input id="inp-sport" class="inp" type="text" placeholder="例：サッカー、バスケットボール"></div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-hdr">🎯 目標・信念</div>
+      <div class="fg">
+        <label class="fl">あなたの４年間の最終目標は何でしょうか<span class="hint">（後から変更できます）</span></label>
+        <textarea id="inp-goal" class="ta" rows="3" placeholder="例：〇〇大会で優勝する、日本代表に選ばれる"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">そのために大切にしなければならないことは</label>
+        <textarea id="inp-important" class="ta" rows="2" placeholder="例：毎日の練習を全力で取り組む、食事・睡眠を管理する"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">座右の銘</label>
+        <input id="inp-motto" class="inp" type="text" placeholder="例：努力は必ず報われる、一日一善">
+      </div>
+    </div>
+    <div class="notice" style="font-size:12px;">📌 月間目標・週間目標は紙に大きく書いて教室に貼りましょう！デジタルではなく手書きで目標を意識させることが大切です。</div>
+    <div style="padding-bottom:16px;">
+      <button class="btn" onclick="setupProfile()">はじめる →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HOME ===== -->
+<div class="sc" id="sh">
+  <div class="home-top">
+    <div class="gt">こんにちは 👋</div>
+    <div class="gn" id="g-name">—</div>
+    <div class="sbadge">🔥 <span id="g-streak">0</span>日連続記録中</div>
+  </div>
+  <div class="sa" style="padding-top:4px;">
+    <div style="margin-bottom:14px;">
+      <div class="today-card">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="st-dot ng" id="st-dot"></div>
+          <div><div class="st-txt" id="st-txt">本日の記録：未入力</div><div class="st-dt" id="st-dt">—</div></div>
+        </div>
+        <button class="btn" style="width:auto;padding:9px 16px;font-size:13px;" onclick="nav('daily')">記録する</button>
+      </div>
+    </div>
+    <!-- マイ目標カード -->
+    <div class="goal-card" id="goal-card">
+      <div class="goal-card-hdr">
+        <div class="goal-card-title">🎯 マイ目標</div>
+        <button class="btn-sm" onclick="nav('profile')">編集</button>
+      </div>
+      <div id="goal-display"></div>
+    </div>
+    <!-- PDF作成 -->
+    <div class="card">
+      <div class="ctit">📄 PDF提出レポート作成</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">月ごとの記録をA4 PDFに変換して提出できます。</p>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <select id="sel-year" class="inp" style="flex:1;padding:10px 10px;font-size:14px;"></select>
+        <select id="sel-month" class="inp" style="flex:1;padding:10px 10px;font-size:14px;"></select>
+      </div>
+      <button onclick="openPDF()" style="width:100%;padding:13px;background:var(--gd);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">📄 PDFレポートを作成する</button>
+    </div>
+    <!-- D-reflection Note とは (compact) -->
+    <div class="about-card" onclick="nav('about')">
+      <div class="about-card-inner">
+        <div class="about-icon">📖</div>
+        <div><div class="about-title">D-reflection Note とは</div><div class="about-sub">このノートの目的・使い方を確認する</div></div>
+      </div>
+    </div>
+    <div class="stit">最近の記録</div>
+    <div id="recent-list"></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni on" onclick="nav('home')"><span class="ni-ic">🏠</span><span class="ni-lb">ホーム</span></button>
+    <button class="ni" onclick="nav('daily')"><span class="ni-ic">✏️</span><span class="ni-lb">日誌入力</span></button>
+    <button class="ni" onclick="nav('weekly')"><span class="ni-ic">📅</span><span class="ni-lb">週の振り返り</span></button>
+    <button class="ni" onclick="nav('history')"><span class="ni-ic">📊</span><span class="ni-lb">履歴</span></button>
+  </nav>
+</div>
+
+<!-- ===== DAILY ===== -->
+<div class="sc" id="sd">
+  <div class="hdr"><div class="hdr-logo">DR</div><div><div class="sub">D-Reflection Note</div><h1>日誌入力</h1></div></div>
+  <div class="sa">
+    <div class="card"><div class="ctit">📅 記録日</div><input type="date" id="d-date" class="inp" onchange="loadEByDate(this.value)"></div>
+    <div class="card">
+      <div class="ctit">📏 身体データ</div>
+      <div class="fg"><label class="fl">体重</label><div class="wr"><input type="number" id="d-weight" class="inp" placeholder="例：68.5" step="0.1" min="30" max="200" style="padding-right:44px;"><span class="wu">kg</span></div></div>
+      <div class="tw">
+        <div class="tc"><div class="fg"><label class="fl">起床時間</label><input type="time" id="d-wake" class="inp"></div></div>
+        <div class="tc"><div class="fg"><label class="fl">就寝時間</label><input type="time" id="d-sleep" class="inp"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctit">💪 コンディション</div>
+      <div class="sc-wrap">
+        <div class="sc-lbl">体調<span class="sc-sub">今日の身体の状態</span></div>
+        <div class="sc-row" id="sc-cond"><button class="sb" onclick="setSc('cond',1)">1</button><button class="sb" onclick="setSc('cond',2)">2</button><button class="sb" onclick="setSc('cond',3)">3</button><button class="sb" onclick="setSc('cond',4)">4</button><button class="sb" onclick="setSc('cond',5)">5</button></div>
+        <div class="sc-hints"><span class="sc-hint">最低</span><span class="sc-hint">最高</span></div>
+      </div>
+      <div class="sc-wrap">
+        <div class="sc-lbl">疲労感<span class="sc-sub">疲れの感覚</span></div>
+        <div class="sc-row" id="sc-fat"><button class="sb" onclick="setSc('fat',1)">1</button><button class="sb" onclick="setSc('fat',2)">2</button><button class="sb" onclick="setSc('fat',3)">3</button><button class="sb" onclick="setSc('fat',4)">4</button><button class="sb" onclick="setSc('fat',5)">5</button></div>
+        <div class="sc-hints"><span class="sc-hint">全くない</span><span class="sc-hint">非常に強い</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctit">🩹 怪我・痛み</div>
+      <div class="inj-row"><button class="tb no" id="inj-no" onclick="setInj(false)">怪我なし</button><button class="tb" id="inj-yes" onclick="setInj(true)">怪我あり</button></div>
+      <div id="inj-wrap" style="display:none;"><textarea id="d-inj" class="ta" rows="2" placeholder="部位・程度・状況などを記入してください"></textarea></div>
+    </div>
+    <div class="card"><div class="ctit">🏋️ トレーニング内容</div><textarea id="d-train" class="ta" rows="3" placeholder="今日のトレーニングメニューを記入してください"></textarea></div>
+    <div class="card"><div class="ctit">💡 課題・学び</div><textarea id="d-learn" class="ta" rows="3" placeholder="今日の課題や気づき、学んだことを記入してください"></textarea></div>
+    <div class="card">
+      <div class="ctit">⭐ 今日の点数</div>
+      <div class="sc-row" id="sc-score"><button class="sb" onclick="setSc('score',1)">1</button><button class="sb" onclick="setSc('score',2)">2</button><button class="sb" onclick="setSc('score',3)">3</button><button class="sb" onclick="setSc('score',4)">4</button><button class="sb" onclick="setSc('score',5)">5</button></div>
+      <div class="sc-hints"><span class="sc-hint">目標未達成</span><span class="sc-hint">目標達成！</span></div>
+    </div>
+    <div class="sbw"><button class="btn" onclick="saveDaily()">💾 保存する</button></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni" onclick="nav('home')"><span class="ni-ic">🏠</span><span class="ni-lb">ホーム</span></button>
+    <button class="ni on" onclick="nav('daily')"><span class="ni-ic">✏️</span><span class="ni-lb">日誌入力</span></button>
+    <button class="ni" onclick="nav('weekly')"><span class="ni-ic">📅</span><span class="ni-lb">週の振り返り</span></button>
+    <button class="ni" onclick="nav('history')"><span class="ni-ic">📊</span><span class="ni-lb">履歴</span></button>
+  </nav>
+</div>
+
+<!-- ===== WEEKLY ===== -->
+<div class="sc" id="swk">
+  <div class="hdr"><div class="hdr-logo">DR</div><div><div class="sub">D-Reflection Note</div><h1>週の振り返り</h1></div></div>
+  <div class="sa">
+    <div class="wsel">
+      <button class="wnb" onclick="chWk(-1)">‹</button>
+      <div style="text-align:center;"><div class="wlbl" id="w-lbl">—</div><div class="wdt" id="w-dt">—</div></div>
+      <button class="wnb" onclick="chWk(1)">›</button>
+    </div>
+    <div class="card"><div class="ctit">📊 今週の記録サマリー</div><div id="w-sum"></div></div>
+    <div class="card"><div class="ctit">📝 今週の振り返り</div><textarea id="wk-ref" class="ta" rows="5" placeholder="今週の活動を振り返って記入してください。&#10;・達成できたこと&#10;・改善が必要なこと&#10;・体調や疲労の変化など"></textarea></div>
+    <div class="card"><div class="ctit">🎯 来週の目標</div><textarea id="wk-goal" class="ta" rows="4" placeholder="来週に向けた具体的な目標を記入してください。"></textarea></div>
+    <div class="sbw"><button class="btn" onclick="saveWeekly()">💾 保存する</button></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni" onclick="nav('home')"><span class="ni-ic">🏠</span><span class="ni-lb">ホーム</span></button>
+    <button class="ni" onclick="nav('daily')"><span class="ni-ic">✏️</span><span class="ni-lb">日誌入力</span></button>
+    <button class="ni on" onclick="nav('weekly')"><span class="ni-ic">📅</span><span class="ni-lb">週の振り返り</span></button>
+    <button class="ni" onclick="nav('history')"><span class="ni-ic">📊</span><span class="ni-lb">履歴</span></button>
+  </nav>
+</div>
+
+<!-- ===== HISTORY ===== -->
+<div class="sc" id="shs">
+  <div class="hdr"><div class="hdr-logo">DR</div><div><div class="sub">D-Reflection Note</div><h1>記録履歴</h1></div></div>
+  <div class="sa" id="hist-list"></div>
+  <nav class="bnav">
+    <button class="ni" onclick="nav('home')"><span class="ni-ic">🏠</span><span class="ni-lb">ホーム</span></button>
+    <button class="ni" onclick="nav('daily')"><span class="ni-ic">✏️</span><span class="ni-lb">日誌入力</span></button>
+    <button class="ni" onclick="nav('weekly')"><span class="ni-ic">📅</span><span class="ni-lb">週の振り返り</span></button>
+    <button class="ni on" onclick="nav('history')"><span class="ni-ic">📊</span><span class="ni-lb">履歴</span></button>
+  </nav>
+</div>
+
+<!-- ===== VIEW ENTRY ===== -->
+<div class="sc" id="sv">
+  <div class="hdr"><button class="back-btn" onclick="nav('history')">‹</button><div><div class="sub">D-Reflection Note</div><h1 id="v-hdr">—</h1></div></div>
+  <div class="sa" id="v-body"></div>
+</div>
+
+<!-- ===== PROFILE EDIT ===== -->
+<div class="sc" id="spe">
+  <div class="hdr"><button class="back-btn" onclick="nav('home')">‹</button><div><div class="sub">D-Reflection Note</div><h1>プロフィール編集</h1></div></div>
+  <div class="sa">
+    <div class="profile-section">
+      <div class="profile-section-hdr">👤 基本情報</div>
+      <div class="fg"><label class="fl">氏名<span class="req">*</span></label><input id="ep-name" class="inp" type="text"></div>
+      <div class="fg"><label class="fl">学籍番号</label><input id="ep-sid" class="inp" type="text"></div>
+      <div class="fg"><label class="fl">担当スポーツ・種目</label><input id="ep-sport" class="inp" type="text"></div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-hdr">🎯 目標・信念</div>
+      <div class="fg"><label class="fl">４年間の最終目標</label><textarea id="ep-goal" class="ta" rows="3"></textarea></div>
+      <div class="fg"><label class="fl">そのために大切にしなければならないこと</label><textarea id="ep-important" class="ta" rows="2"></textarea></div>
+      <div class="fg"><label class="fl">座右の銘</label><input id="ep-motto" class="inp" type="text"></div>
+    </div>
+    <div class="sbw"><button class="btn" onclick="saveProfile()">💾 保存する</button></div>
+  </div>
+</div>
+
+<!-- ===== ABOUT (D-reflection Note とは) ===== -->
+<div class="sc" id="sab">
+  <div class="hdr"><button class="back-btn" onclick="nav('home')">‹</button><div><div class="sub">D-Reflection Note</div><h1>このノートについて</h1></div></div>
+  <div class="sa">
+    <div class="intro-body" style="padding:0;">
+      <div class="intro-section-label" style="margin-bottom:14px;">D-reflection Note とは</div>
+      <div class="intro-text">D-reflection Note はトレーニング目標を設定し、目標達成のための行動記録を記し、課題を言語化することで、自らの行動を客観的に見つめなおすためのノートである。</div>
+      <div class="intro-text">人間の脳は都合の良いことを記憶し、苦痛になることを忘れやすい特性がある。スポーツは目標を達成するにあたり、失敗の連続であり、失敗に対してあきらめずに、しかも合理的、効率的な方法を選択し、取り組み続けなければならない。<br><br>すなわち、アスリートとして目標を達成するためには、日々の課題を視覚化（明確化）し自らの欠点と向き合う<strong>レジリエンス（粘り強さ）</strong>が求められる。<br>この日誌の作成を通して、成功への一助としてもらいたい。</div>
+      <div class="intro-quote">
+        <div class="intro-quote-text"><span class="intro-quote-kagi">『</span>最も努力した選手が成功するとは限らない。それでも、諦めなかったものだけが成功に到達する。<span class="intro-quote-kagi">』</span></div>
+      </div>
+      <div class="intro-attr">大東文化大学<br>スポーツフィールドワーク担当教員</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /#app -->
+
+<!-- ===== PDF OVERLAY ===== -->
+<div id="pdf-overlay">
+  <div id="pdf-toolbar">
+    <div><div class="tl">📄 PDFレポートプレビュー</div><div style="font-size:10px;opacity:.7;margin-top:2px;">内容を確認して「PDF保存・印刷」を押してください</div></div>
+    <button onclick="closePDF()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:7px 12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">✕</button>
+  </div>
+  <div id="pdf-content"></div>
+  <div class="pdf-actions">
+    <button class="btn-cpdf" onclick="closePDF()">← 戻る</button>
+    <button class="btn-print" onclick="doPrint()">🖨️ PDF保存・印刷</button>
+  </div>
+</div>
+
+<script>
+var P=null,E={},W={},SC={cond:0,fat:0,score:0},INJ=false,WO=0;
+var SCOLS=['','#C62828','#E65100','#D4A017','#3D7A2B','#1B5E20'];
+var SLBLS=['','目標未達成','やや不満足','普通','良かった','最高の1日！'];
+var DAYS=['日','月','火','水','木','金','土'];
+
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+
+function init(){
+  P=ld('drn_p',null);E=ld('drn_e',{});W=ld('drn_w',{});
+  if(P){show('sh');refreshHome();buildSel();}
+  else{show('si');}/* 初回はイントロ画面 */
+}
+
+function show(id){document.querySelectorAll('.sc').forEach(function(s){s.classList.remove('on');});var el=document.getElementById(id);if(el){el.classList.add('on');if(el.querySelector('.sa'))el.querySelector('.sa').scrollTop=0;}}
+
+function goToProfile(){show('sw');}
+
+function nav(t){
+  if(t==='home'){show('sh');refreshHome();}
+  else if(t==='daily'){show('sd');setupDaily();}
+  else if(t==='weekly'){show('swk');setupWeekly();}
+  else if(t==='history'){show('shs');renderHist();}
+  else if(t==='profile'){show('spe');loadProfileEdit();}
+  else if(t==='about'){show('sab');}
+}
+
+/* ---- PROFILE SETUP (first time) ---- */
+function setupProfile(){
+  var n=document.getElementById('inp-name').value.trim();
+  if(!n){alert('氏名を入力してください');return;}
+  P={
+    name:n,
+    sid:document.getElementById('inp-sid').value.trim(),
+    sport:document.getElementById('inp-sport').value.trim(),
+    goal4year:document.getElementById('inp-goal').value.trim(),
+    goalImportant:document.getElementById('inp-important').value.trim(),
+    motto:document.getElementById('inp-motto').value.trim()
+  };
+  sv('drn_p',P);show('sh');refreshHome();buildSel();
+}
+
+/* ---- PROFILE EDIT ---- */
+function loadProfileEdit(){
+  if(!P)return;
+  document.getElementById('ep-name').value=P.name||'';
+  document.getElementById('ep-sid').value=P.sid||'';
+  document.getElementById('ep-sport').value=P.sport||'';
+  document.getElementById('ep-goal').value=P.goal4year||'';
+  document.getElementById('ep-important').value=P.goalImportant||'';
+  document.getElementById('ep-motto').value=P.motto||'';
+}
+function saveProfile(){
+  var n=document.getElementById('ep-name').value.trim();
+  if(!n){alert('氏名を入力してください');return;}
+  P.name=n;P.sid=document.getElementById('ep-sid').value.trim();P.sport=document.getElementById('ep-sport').value.trim();
+  P.goal4year=document.getElementById('ep-goal').value.trim();P.goalImportant=document.getElementById('ep-important').value.trim();P.motto=document.getElementById('ep-motto').value.trim();
+  sv('drn_p',P);toast();nav('home');
+}
+
+/* ---- HOME ---- */
+function refreshHome(){
+  document.getElementById('g-name').textContent=P.name;
+  document.getElementById('g-streak').textContent=calcStreak();
+  var tk=todayKey();
+  document.getElementById('st-dt').textContent=fmtJP(tk);
+  var has=!!E[tk];
+  document.getElementById('st-dot').className='st-dot '+(has?'ok':'ng');
+  document.getElementById('st-txt').textContent=has?'本日の記録：入力済み ✓':'本日の記録：未入力';
+  renderGoalCard();
+  renderRecent();
+}
+function renderGoalCard(){
+  var c=document.getElementById('goal-display');
+  var hasGoals=P&&(P.goal4year||P.goalImportant||P.motto);
+  if(!hasGoals){c.innerHTML='<div class="goal-empty">目標・座右の銘が設定されていません。「編集」から入力しましょう。</div>';return;}
+  var html='';
+  if(P.goal4year){html+='<div class="goal-item"><div class="goal-item-label">４年間の最終目標</div><div class="goal-item-text">'+esc(P.goal4year)+'</div></div>';}
+  if(P.goalImportant){html+='<div class="goal-item"><div class="goal-item-label">そのために大切にすること</div><div class="goal-item-text">'+esc(P.goalImportant)+'</div></div>';}
+  if(P.motto){html+='<div class="goal-item"><div class="goal-item-label">座右の銘</div><div class="goal-item-text motto">「'+esc(P.motto)+'」</div></div>';}
+  c.innerHTML=html;
+}
+function renderRecent(){
+  var c=document.getElementById('recent-list');
+  var ks=Object.keys(E).sort(function(a,b){return b.localeCompare(a);}).slice(0,5);
+  if(!ks.length){c.innerHTML='<div class="empty"><div class="empty-ic">📔</div><p style="font-size:14px;line-height:1.7;">まだ記録がありません。<br>今日から記録を始めましょう！</p></div>';return;}
+  c.innerHTML=ks.map(function(k){return eiHTML(k,E[k]);}).join('');
+}
+function buildSel(){
+  var d=new Date(),y=d.getFullYear(),m=d.getMonth()+1;
+  var ys=document.getElementById('sel-year'),ms=document.getElementById('sel-month');
+  ys.innerHTML='';for(var i=y;i>=y-3;i--)ys.innerHTML+='<option value="'+i+'">'+i+'年</option>';
+  ms.innerHTML='';for(var i=1;i<=12;i++)ms.innerHTML+='<option value="'+i+'"'+(i===m?' selected':'')+'>'+i+'月</option>';
+}
+
+/* ---- DAILY ---- */
+function setupDaily(){var tk=todayKey();document.getElementById('d-date').value=tk;loadEByDate(tk);}
+function loadEByDate(dk){
+  var ex=E[dk];
+  if(ex){
+    document.getElementById('d-weight').value=ex.weight||'';document.getElementById('d-wake').value=ex.wakeTime||'';document.getElementById('d-sleep').value=ex.sleepTime||'';
+    document.getElementById('d-train').value=ex.trainingMenu||'';document.getElementById('d-learn').value=ex.learnings||'';document.getElementById('d-inj').value=ex.injuryNote||'';
+    SC={cond:ex.condition||0,fat:ex.fatigue||0,score:ex.score||0};
+    ['cond','fat','score'].forEach(function(f){renderSc(f,SC[f]);});setInj(ex.hasInjury||false);
+  }else{
+    ['d-weight','d-wake','d-sleep','d-train','d-learn','d-inj'].forEach(function(id){document.getElementById(id).value='';});
+    SC={cond:0,fat:0,score:0};['cond','fat','score'].forEach(function(f){renderSc(f,0);});setInj(false);
+  }
+}
+function setSc(f,v){SC[f]=v;renderSc(f,v);}
+function renderSc(f,v){
+  var m={cond:'sc-cond',fat:'sc-fat',score:'sc-score'};
+  document.querySelectorAll('#'+m[f]+' .sb').forEach(function(b,i){b.className='sb';if(i+1===v)b.className='sb s'+v;});
+}
+function setInj(v){
+  INJ=v;document.getElementById('inj-no').className='tb'+(!v?' no':'');document.getElementById('inj-yes').className='tb'+(v?' yes':'');document.getElementById('inj-wrap').style.display=v?'block':'none';
+}
+function saveDaily(){
+  var dk=document.getElementById('d-date').value;if(!dk){alert('日付を選択してください');return;}
+  E[dk]={date:dk,weight:parseFloat(document.getElementById('d-weight').value)||null,wakeTime:document.getElementById('d-wake').value||null,sleepTime:document.getElementById('d-sleep').value||null,condition:SC.cond,fatigue:SC.fat,score:SC.score,hasInjury:INJ,injuryNote:document.getElementById('d-inj').value.trim(),trainingMenu:document.getElementById('d-train').value.trim(),learnings:document.getElementById('d-learn').value.trim(),savedAt:Date.now()};
+  sv('drn_e',E);toast();if(navigator.vibrate)navigator.vibrate(50);
+}
+
+/* ---- WEEKLY ---- */
+function setupWeekly(){WO=0;renderWkly();}
+function chWk(d){WO+=d;renderWkly();}
+function renderWkly(){
+  var key=wkKey(WO),range=wkRange(WO);
+  var lbl=WO===0?'今週':WO===-1?'先週':Math.abs(WO)+'週'+(WO<0?'前':'後');
+  document.getElementById('w-lbl').textContent=lbl;document.getElementById('w-dt').textContent=fmtD(range.s)+' 〜 '+fmtD(range.e);
+  var ex=W[key]||{};document.getElementById('wk-ref').value=ex.reflection||'';document.getElementById('wk-goal').value=ex.nextGoal||'';
+  renderWkSum(range);
+}
+function renderWkSum(range){
+  var c=document.getElementById('w-sum');
+  var dates=[];for(var d=new Date(range.s);d<=range.e;d.setDate(d.getDate()+1))dates.push(toKey(new Date(d)));
+  var es=dates.map(function(dk){return E[dk];}).filter(Boolean);
+  if(!es.length){c.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:8px 0;">この週の記録がありません</p>';return;}
+  var cs=es.filter(function(e){return e.condition;}),fs=es.filter(function(e){return e.fatigue;});
+  var ac=cs.length?(cs.reduce(function(s,e){return s+e.condition;},0)/cs.length).toFixed(1):null;
+  var af=fs.length?(fs.reduce(function(s,e){return s+e.fatigue;},0)/fs.length).toFixed(1):null;
+  function mini(l,v){return '<div style="background:var(--gbg);border-radius:10px;padding:9px 6px;text-align:center;"><div style="font-size:10px;color:var(--muted);">'+l+'</div><div style="font-size:18px;font-weight:900;color:var(--gm);">'+v+'</div></div>';}
+  function pip(v,l){return '<span style="font-size:11px;background:'+SCOLS[v]+'22;color:'+SCOLS[v]+';padding:2px 7px;border-radius:6px;font-weight:700;">'+l+v+'</span>';}
+  var html='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">'+mini('記録日数',es.length+'日')+mini('平均体調',ac||'—')+mini('平均疲労',af||'—')+'</div>';
+  html+=dates.map(function(dk){var e=E[dk],dt=new Date(dk);return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--gbg);">'+'<span style="font-size:11px;color:var(--muted);min-width:28px;">'+DAYS[dt.getDay()]+'曜</span>'+(e?'<div style="display:flex;gap:5px;flex:1;flex-wrap:wrap;">'+(e.condition?pip(e.condition,'体調'):'')+(e.fatigue?pip(e.fatigue,'疲労'):'')+(e.weight?'<span style="font-size:11px;background:var(--gbg);padding:2px 7px;border-radius:6px;color:var(--gm);">'+e.weight+'kg</span>':'')+'</div>':'<span style="font-size:11px;color:var(--muted);">未記録</span>')+'</div>';}).join('');
+  c.innerHTML=html;
+}
+function saveWeekly(){W[wkKey(WO)]={reflection:document.getElementById('wk-ref').value.trim(),nextGoal:document.getElementById('wk-goal').value.trim(),savedAt:Date.now()};sv('drn_w',W);toast();}
+
+/* ---- HISTORY ---- */
+function renderHist(){
+  var c=document.getElementById('hist-list');
+  var ks=Object.keys(E).sort(function(a,b){return b.localeCompare(a);});
+  if(!ks.length){c.innerHTML='<div class="empty"><div class="empty-ic">📊</div><p style="font-size:14px;line-height:1.7;">まだ記録がありません。</p></div>';return;}
+  var by={};ks.forEach(function(k){var m=k.slice(0,7);if(!by[m])by[m]=[];by[m].push(k);});
+  var html='';
+  Object.keys(by).sort(function(a,b){return b.localeCompare(a);}).forEach(function(mon){
+    var p=mon.split('-');html+='<div class="stit">'+parseInt(p[0])+'年'+parseInt(p[1])+'月</div>';
+    by[mon].forEach(function(k){html+=eiHTML(k,E[k]);});
+  });
+  c.innerHTML=html;
+}
+function eiHTML(dk,e){
+  var dt=new Date(dk),day=dt.getDate(),mon=dt.getMonth()+1,dow=DAYS[dt.getDay()],sc=e.score;
+  var meta=[e.weight?e.weight+'kg':null,e.wakeTime?'起床 '+e.wakeTime:null,e.condition?'体調 '+e.condition:null].filter(Boolean).join(' · ');
+  return '<div class="ei" onclick="viewE(\''+dk+'\')">'+'<div class="edb"><div class="ed">'+day+'</div><div class="em">'+mon+'月 '+dow+'曜</div></div>'+'<div class="ei-info"><div class="ei-t">'+fmtJP(dk)+'</div><div class="ei-m">'+(meta||'記録あり')+'</div></div>'+(sc?'<div class="scbadge" style="background:'+SCOLS[sc]+';">'+sc+'</div>':'')+'</div>';
+}
+function viewE(dk){
+  var e=E[dk];if(!e)return;show('sv');
+  document.getElementById('v-hdr').textContent=fmtJP(dk);
+  var rows=[['体重',e.weight?e.weight+' kg':'—'],['起床時間',e.wakeTime||'—'],['就寝時間',e.sleepTime||'—'],['体調',e.condition?e.condition+' / 5':'—'],['疲労感',e.fatigue?e.fatigue+' / 5':'—'],['怪我・痛み',e.hasInjury?'あり'+(e.injuryNote?': '+e.injuryNote:''):'なし']];
+  function dr(arr){return arr.map(function(r){return '<div class="dr"><span class="dk">'+r[0]+'</span><span class="dv">'+r[1]+'</span></div>';}).join('');}
+  var html='<div style="padding:16px;">'+'<div class="card"><div class="ctit">📏 身体データ</div>'+dr(rows.slice(0,3))+'</div>'+'<div class="card"><div class="ctit">💪 コンディション</div>'+dr(rows.slice(3))+'</div>';
+  if(e.trainingMenu)html+='<div class="card"><div class="ctit">🏋️ トレーニング内容</div><p style="font-size:14px;line-height:1.8;white-space:pre-wrap;">'+esc(e.trainingMenu)+'</p></div>';
+  if(e.learnings)html+='<div class="card"><div class="ctit">💡 課題・学び</div><p style="font-size:14px;line-height:1.8;white-space:pre-wrap;">'+esc(e.learnings)+'</p></div>';
+  if(e.score)html+='<div class="card" style="text-align:center;padding:20px 16px;"><div class="ctit">⭐ 今日の点数</div><div style="font-size:60px;font-weight:900;color:'+SCOLS[e.score]+';line-height:1;">'+e.score+'</div><div style="font-size:13px;color:'+SCOLS[e.score]+';margin-top:5px;font-weight:700;">'+SLBLS[e.score]+'</div></div>';
+  html+='<button class="btn2" onclick="editE(\''+dk+'\')">この記録を編集する</button></div>';
+  document.getElementById('v-body').innerHTML=html;
+}
+function editE(dk){show('sd');document.getElementById('d-date').value=dk;loadEByDate(dk);}
+
+/* ===== PDF ===== */
+function openPDF(){
+  var y=parseInt(document.getElementById('sel-year').value);var m=parseInt(document.getElementById('sel-month').value);
+  document.getElementById('pdf-content').innerHTML=buildReport(y,m);
+  document.getElementById('pdf-overlay').classList.add('on');document.getElementById('pdf-content').scrollTop=0;
+}
+function closePDF(){document.getElementById('pdf-overlay').classList.remove('on');}
+function doPrint(){setTimeout(function(){window.print();},100);}
+
+function buildReport(y,m){
+  var p2=function(n){return String(n).padStart(2,'0');};
+  var dim=new Date(y,m,0).getDate();var mStr=y+'年'+m+'月';
+  var sdot=function(v){if(!v)return'<span style="color:#ccc;">—</span>';return'<span class="rpt-dot" style="background:'+SCOLS[v]+';">'+v+'</span>';};
+
+  /* 日別テーブル行 */
+  var rows='';
+  for(var d=1;d<=dim;d++){
+    var dk=y+'-'+p2(m)+'-'+p2(d);var e=E[dk];var dt=new Date(y,m-1,d);var dow=DAYS[dt.getDay()];
+    var dc=dt.getDay()===0?'color:#C62828;font-weight:700':dt.getDay()===6?'color:#1B5E20;font-weight:700':'font-weight:700';
+    var injTxt=e&&e.hasInjury?('<span style="color:#C62828;font-weight:700;">あり</span>'+(e.injuryNote?'：'+esc(e.injuryNote).slice(0,18):'')):'—';
+    rows+='<tr style="'+((!e)?'background:#FAFAFA;':'')+'">'
+      +'<td class="tl" style="'+dc+'">'+m+'/'+d+'('+dow+')</td>'
+      +'<td>'+(e&&e.weight?e.weight:'—')+'</td>'
+      +'<td>'+(e&&e.wakeTime?e.wakeTime:'—')+'</td>'
+      +'<td>'+(e&&e.sleepTime?e.sleepTime:'—')+'</td>'
+      +'<td>'+sdot(e&&e.condition)+'</td>'
+      +'<td>'+sdot(e&&e.fatigue)+'</td>'
+      +'<td>'+sdot(e&&e.score)+'</td>'
+      +'<td class="tl sm">'+injTxt+'</td>'
+      +'</tr>';
+  }
+
+  /* 週別振り返り */
+  var weeks=getMonthWeeks(y,m);
+  var weeksHtml=weeks.map(function(wk,i){
+    var dts=getDates(wk.s,wk.e);var cnt=dts.filter(function(dk){return E[dk];}).length;
+    var key=wkKey2(wk.s);var wd=W[key]||{};
+    return '<div class="rpt-week"><div class="rpt-week-hdr">第'+(i+1)+'週　'+fmtD(wk.s)+' 〜 '+fmtD(wk.e)+'　（記録 '+cnt+'/'+dts.length+' 日）</div><div class="rpt-week-body">'
+      +(wd.reflection?'<div class="rpt-wlbl">▶ 今週の振り返り</div><div class="rpt-wval">'+esc(wd.reflection)+'</div>':'')
+      +(wd.nextGoal?'<div class="rpt-wlbl">▶ 来週の目標</div><div class="rpt-wval">'+esc(wd.nextGoal)+'</div>':'')
+      +(!wd.reflection&&!wd.nextGoal?'<p style="font-size:9pt;color:#888;">振り返りが入力されていません</p>':'')
+      +'</div></div>';
+  }).join('');
+
+  /* トレーニング記録 */
+  var notesHtml='';
+  for(var d=1;d<=dim;d++){var dk2=y+'-'+p2(m)+'-'+p2(d);var e2=E[dk2];if(e2&&(e2.trainingMenu||e2.learnings)){var dt2=new Date(y,m-1,d);notesHtml+='<div class="rpt-note"><div class="rpt-note-dt">'+m+'/'+d+'（'+DAYS[dt2.getDay()]+'曜日）</div>'+(e2.trainingMenu?'<div class="rpt-note-lbl">トレーニング内容</div><div class="rpt-note-val">'+esc(e2.trainingMenu)+'</div>':'')+(e2.learnings?'<div class="rpt-note-lbl">課題・学び</div><div class="rpt-note-val">'+esc(e2.learnings)+'</div>':'')+'</div>';}}
+
+  /* 統計 */
+  var allE=[];for(var d=1;d<=dim;d++){var e3=E[y+'-'+p2(m)+'-'+p2(d)];if(e3)allE.push(e3);}
+  var avg=function(f){var filt=allE.filter(function(e){return e[f];});return filt.length?(filt.reduce(function(s,e){return s+e[f];},0)/filt.length).toFixed(1):'—';};
+  var injDays=allE.filter(function(e){return e.hasInjury;}).length;
+
+  /* 目標セクション */
+  var goalsHtml='';
+  if(P&&(P.goal4year||P.goalImportant||P.motto)){
+    goalsHtml='<div class="rpt-goals">'
+      +'<div class="rpt-goals-hdr">🎯 目標・信念</div>'
+      +'<div class="rpt-goals-body">'
+      +(P.goal4year?'<div class="rpt-goal-item"><div class="rgl">４年間の最終目標</div><div class="rgv">'+esc(P.goal4year)+'</div></div>':'')
+      +(P.goalImportant?'<div class="rpt-goal-item"><div class="rgl">大切にしていること</div><div class="rgv">'+esc(P.goalImportant)+'</div></div>':'')
+      +(P.motto?'<div class="rpt-goal-item rpt-motto"><div class="rgl">座右の銘</div><div class="rgv" style="font-weight:700;color:#3B6621;">「'+esc(P.motto)+'」</div></div>':'')
+      +'</div></div>';
+  }
+
+  return '<div class="rpt">'
+    +'<div class="rpt-hdr"><div><div class="rpt-hdr-title">D-Reflection Note</div><div class="rpt-hdr-sub">大東文化大学 スポーツ・健康科学部　スポーツフィールドワーク 月間記録レポート</div></div><div class="rpt-hdr-logo">DR</div></div>'
+    +'<div class="rpt-info"><table><tr>'
+    +'<td class="lbl">氏名</td><td class="val" style="min-width:80px;">'+(P?esc(P.name):'—')+'</td>'
+    +'<td class="lbl">学籍番号</td><td class="val">'+(P&&P.sid?esc(P.sid):'—')+'</td>'
+    +'<td class="lbl">担当種目</td><td class="val">'+(P&&P.sport?esc(P.sport):'—')+'</td>'
+    +'<td class="lbl">記録期間</td><td class="val">'+mStr+'</td>'
+    +'</tr></table></div>'
+    +goalsHtml
+    +'<div class="rpt-sec"><div class="rpt-sec-tit">📊 月間サマリー</div>'
+    +'<div class="rpt-stats">'
+    +'<div class="rpt-stat"><div class="rpt-stat-lbl">記録日数</div><div class="rpt-stat-val">'+allE.length+'</div><div class="rpt-stat-sub">/ '+dim+' 日</div></div>'
+    +'<div class="rpt-stat"><div class="rpt-stat-lbl">平均体調</div><div class="rpt-stat-val">'+avg('condition')+'</div><div class="rpt-stat-sub">/ 5</div></div>'
+    +'<div class="rpt-stat"><div class="rpt-stat-lbl">平均疲労感</div><div class="rpt-stat-val">'+avg('fatigue')+'</div><div class="rpt-stat-sub">/ 5</div></div>'
+    +'<div class="rpt-stat"><div class="rpt-stat-lbl">平均点数</div><div class="rpt-stat-val">'+avg('score')+'</div><div class="rpt-stat-sub">/ 5</div></div>'
+    +'<div class="rpt-stat"><div class="rpt-stat-lbl">怪我・痛みの日</div><div class="rpt-stat-val" style="color:'+(injDays>0?'#C62828':'#3B6621')+';">'+injDays+'</div><div class="rpt-stat-sub">日</div></div>'
+    +'<div class="rpt-stat"><div class="rpt-stat-lbl">達成率</div><div class="rpt-stat-val">'+(dim>0?Math.round(allE.length/dim*100):0)+'</div><div class="rpt-stat-sub">%</div></div>'
+    +'</div></div>'
+    +'<div class="rpt-sec"><div class="rpt-sec-tit">📅 日別記録</div><table class="rpt-tbl"><thead><tr><th class="tl">日付</th><th>体重(kg)</th><th>起床</th><th>就寝</th><th>体調</th><th>疲労感</th><th>点数</th><th class="tl">怪我・痛み</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+    +'<div class="rpt-sec"><div class="rpt-sec-tit">📝 週別振り返り</div>'+weeksHtml+'</div>'
+    +(notesHtml?'<div class="rpt-sec"><div class="rpt-sec-tit">🏋️ トレーニング記録・課題</div>'+notesHtml+'</div>':'')
+    +'<div class="rpt-footer"><div style="font-size:9pt;color:#5A6E50;">大東文化大学 スポーツ・健康科学部　スポーツフィールドワーク<br>'+(P?esc(P.name):'')+'　'+mStr+'</div>'
+    +'<div style="display:flex;gap:24px;align-items:flex-end;"><div style="text-align:center;"><div class="rpt-sig">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="font-size:9pt;color:#5A6E50;margin-top:4px;">提出日</div></div>'
+    +'<div style="text-align:center;"><div class="rpt-sig">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="font-size:9pt;color:#5A6E50;margin-top:4px;">担当教員確認</div></div>'
+    +'</div></div></div>';
+}
+
+/* ---- WEEK/DATE HELPERS ---- */
+function getMonthWeeks(y,m){
+  var weeks=[],first=new Date(y,m-1,1),last=new Date(y,m,0),cur=new Date(first);
+  while(cur<=last){var dow=cur.getDay()||7;var ws=new Date(cur);ws.setDate(cur.getDate()-(dow-1));if(ws<first)ws=new Date(first);var we=new Date(ws);we.setDate(ws.getDate()+6);if(we>last)we=new Date(last);weeks.push({s:new Date(ws),e:new Date(we)});cur=new Date(we);cur.setDate(we.getDate()+1);}
+  return weeks;
+}
+function getDates(s,e){var res=[];for(var d=new Date(s);d<=e;d.setDate(d.getDate()+1))res.push(toKey(new Date(d)));return res;}
+function wkKey(off){var d=new Date();d.setDate(d.getDate()-((d.getDay()||7)-1)+(off*7));return wkKey2(d);}
+function wkKey2(d){var t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));var dn=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-dn);var ys=new Date(Date.UTC(t.getUTCFullYear(),0,1));return t.getUTCFullYear()+'-W'+String(Math.ceil((((t-ys)/86400000)+1)/7)).padStart(2,'0');}
+function wkRange(off){var d=new Date(),day=d.getDay();var s=new Date(d);s.setDate(d.getDate()-((day||7)-1)+(off*7));s.setHours(0,0,0,0);var e=new Date(s);e.setDate(s.getDate()+6);return{s:s,e:e};}
+
+/* ---- UTILS ---- */
+function todayKey(){return toKey(new Date());}
+function toKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function fmtD(d){return(d.getMonth()+1)+'/'+d.getDate();}
+function fmtJP(dk){if(!dk)return'—';var p=dk.split('-'),dt=new Date(dk);return parseInt(p[0])+'年'+parseInt(p[1])+'月'+parseInt(p[2])+'日（'+DAYS[dt.getDay()]+'）';}
+function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';  }
+function calcStreak(){var s=0,d=new Date();while(true){var k=toKey(d);if(E[k]){s++;d.setDate(d.getDate()-1);}else break;}return s;}
+var _tt;function toast(){var el=document.getElementById('toast');el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){el.classList.remove('show');},2000);}
+
+init();
+</script>
+</body>
+</html>
